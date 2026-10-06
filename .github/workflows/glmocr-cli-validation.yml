@@ -1,0 +1,79 @@
+name: GLM-OCR frozen CLI validation
+
+on:
+  push:
+    branches: [validation/glmocr-cli-error-results-20261006]
+
+permissions:
+  contents: read
+
+jobs:
+  native-and-precommit:
+    if: >-
+      ${{ github.repository == 'dvd233/GLM-OCR' &&
+          github.repository_id == '1382408774' &&
+          github.repository_owner_id == '111864431' &&
+          github.ref == 'refs/heads/validation/glmocr-cli-error-results-20261006' &&
+          github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PIP_INDEX_URL: https://pypi.org/simple
+      PIP_EXTRA_INDEX_URL: ""
+      PIP_CONFIG_FILE: /dev/null
+      PIP_NO_CACHE_DIR: "1"
+      PIP_DISABLE_PIP_VERSION_CHECK: "1"
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      GLMOCR_RUN_INTEGRATION: "0"
+      ZHIPU_API_KEY: ""
+      GLMOCR_API_KEY: ""
+      HF_TOKEN: ""
+      HUGGING_FACE_HUB_TOKEN: ""
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Set isolated offline model cache path
+        shell: bash
+        run: printf 'HF_HOME=%s/glmocr-empty-hf-home\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+      - name: Checkout independent validation controls
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.sha }}
+          path: validation-controls
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Reject unbound or unexpected source selection
+        run: python validation-controls/validation/check_validation.py --preflight
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Checkout complete immutable upstream baseline
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: zai-org/GLM-OCR
+          ref: cef4d0ea120d1741f5cefe8985eee45f6c8eff1d
+          path: baseline
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Checkout complete immutable candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: dvd233/GLM-OCR
+          ref: 4adc82228f4e12d233d302f16bec41ca798d0db3
+          path: candidate
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Run native comparison and full pre-commit without altering source
+        timeout-minutes: 27
+        run: python validation-controls/validation/check_validation.py
+      - name: Retain exact statuses and diagnostic logs
+        timeout-minutes: 3
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: glmocr-cli-frozen-validation-${{ github.run_id }}
+          path: validation-logs/
+          if-no-files-found: warn
+          retention-days: 3

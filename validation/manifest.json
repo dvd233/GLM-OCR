@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "validation_repository": "dvd233/GLM-OCR",
+  "validation_branch": "validation/glmocr-cli-error-results-20261006",
+  "base_repository": "zai-org/GLM-OCR",
+  "base_commit": "cef4d0ea120d1741f5cefe8985eee45f6c8eff1d",
+  "base_tree": "76148932f458f00b67731e10e5c9768270dbf925",
+  "candidate_repository": "dvd233/GLM-OCR",
+  "candidate_commit": "4adc82228f4e12d233d302f16bec41ca798d0db3",
+  "candidate_tree": "c9c5ce34b5b9c24c3f3c9a5f780534426378d1f0",
+  "expected_passed": {
+    "base": 157,
+    "candidate": 166
+  },
+  "changed_files": [
+    {
+      "path": "glmocr/cli.py",
+      "baseline_blob": "da2846fdca8b1f04207f35e923f525ffbc239f5c",
+      "fixed_blob": "f7e1001c719c69236691be785d2333811317953f",
+      "baseline_sha256": "dab8bf14ac9655aa2af724b2f069863e9c9c999b7cdcf08901573a85fdba7376",
+      "fixed_sha256": "2407e10e4c3f444457d92b1e7b6debd395ccc1b887663148e80e93b401431838",
+      "bytes": 12106
+    },
+    {
+      "path": "glmocr/tests/test_unit.py",
+      "baseline_blob": "876e1c9cdf8efbff996bd4e38b41d8e41a8c63eb",
+      "fixed_blob": "360c4e973313203962c02bd7db40b272617cee3e",
+      "baseline_sha256": "2363378461b7e5a9874b32062f9e8eadba4f864177d2010feb7237674e8257b7",
+      "fixed_sha256": "215776ceddb3e8567773a35453c7932a79d87d1ddd850325d2306dfb75d3f533",
+      "bytes": 104751
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "examples/source/GLM-4.5V.pdf",
+      "git_blob_sha": "8a8ccd96a0c0827a083f13465ef2205f2fbe5f35",
+      "sha256": "fa18b4fa0ce9ac3c367883b7bb29362e99e401abe4eb27f987549157ff76115f",
+      "bytes": 21379100
+    },
+    {
+      "path": "examples/source/code.png",
+      "git_blob_sha": "5e7450a5624c79080f0d1f2778dcddaaa7752483",
+      "sha256": "04989f33870ede82f6ac8afe129dc0b877d1040f2c55162c50c112c97ffc70c3",
+      "bytes": 74440
+    }
+  ],
+  "scope": "Original dev,server,layout dependencies and exact native command; no model/API/listener; full pre-commit; zero skips and no source diff required.",
+  "fork_identity": {
+    "id": 1382408774,
+    "owner_id": 111864431,
+    "parent": "zai-org/GLM-OCR",
+    "verification": "Root connector verification reported 2026-10-06T21:30Z"
+  },
+  "candidate_parent": "cef4d0ea120d1741f5cefe8985eee45f6c8eff1d",
+  "source_branch": "fix/cli-error-results"
+}
